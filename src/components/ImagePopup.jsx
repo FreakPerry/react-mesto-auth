@@ -1,5 +1,3 @@
-import Popup from './Popup';
-
 function ImagePopup({ isOpen, onClose, card }) {
   return (
     <div

@@ -10,15 +10,25 @@ import { api } from '../utils/Api.js';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
+import { Route, Routes } from 'react-router-dom';
+import Login from './Login';
+import Register from './Register';
+import * as authApi from '../utils/ApiAuth.js';
+import { ProtectedRoute } from './ProtectedRoute';
+import { getToken, removeToken } from '../utils/token';
+import InfoToolTip from './InfoToolTip';
 
 function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
+  const [isInfoToolTipOpen, setIsInfoToolTipOpen] = useState(false);
+  const [success, setSuccess] = useState(false);
   const [selectedCard, setSelectedCard] = useState({});
   const [isImageOpen, setIsImageOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
+  const [email, setEmail] = useState('');
 
   const fetchUser = async () => {
     try {
@@ -65,6 +75,7 @@ function App() {
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setIsImageOpen(false);
+    setIsInfoToolTipOpen(false);
   };
 
   const handleCardLike = async card => {
@@ -117,19 +128,86 @@ function App() {
     }
   };
 
+  const checkToken = async dataLogin => {
+    try {
+      const token = getToken();
+      await authApi.getContent(token);
+      setEmail(dataLogin.email);
+    } catch (e) {
+      console.warn(e);
+    }
+  };
+
+  useEffect(() => {
+    checkToken();
+  }, []);
+
+  const handleLogout = () => {
+    removeToken();
+    setEmail('');
+  };
+
+  const handleLogin = async dataLogin => {
+    try {
+      await authApi.login(dataLogin);
+      setEmail(dataLogin.email);
+    } catch (e) {
+      console.warn(e);
+      setSuccess(false);
+      setIsInfoToolTipOpen(true);
+    }
+  };
+
+  const handleRegister = async dataRegister => {
+    try {
+      await authApi.register(dataRegister);
+      setSuccess(true);
+      setIsInfoToolTipOpen(true);
+    } catch (e) {
+      console.warn(e);
+      setSuccess(false);
+      setIsInfoToolTipOpen(true);
+    }
+  };
+
   return (
     <div className="page">
       <CurrentUserContext.Provider value={currentUser}>
-        <Header />
-        <Main
-          onEditProfile={handleEditProfileClick}
-          onAddPlace={handleAddPlaceClick}
-          onEditAvatar={handleEditAvatarClick}
-          onCardClick={handleCardClick}
-          onCardLike={handleCardLike}
-          onCardDelete={handleCardDelete}
-          cards={cards}
-        />
+        <Header email={email} onLogout={handleLogout} />
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute email={email}>
+                <Main
+                  onEditProfile={handleEditProfileClick}
+                  onAddPlace={handleAddPlaceClick}
+                  onEditAvatar={handleEditAvatarClick}
+                  onCardClick={handleCardClick}
+                  onCardLike={handleCardLike}
+                  onCardDelete={handleCardDelete}
+                  cards={cards}
+                />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/sign-up"
+            element={
+              <ProtectedRoute onlyUnAuth email={email} success={success}>
+                <Register onRegister={handleRegister} />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/sign-in"
+            element={
+              <ProtectedRoute onlyUnAuth email={email}>
+                <Login onLogin={handleLogin} />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
         <Footer />
         <EditProfilePopup
           isOpen={isEditProfilePopupOpen}
@@ -157,6 +235,7 @@ function App() {
           onUpdateAvatar={handleUpdateAvatar}
         ></EditAvatarPopup>
         <ImagePopup isOpen={isImageOpen} onClose={closeAllPopups} card={selectedCard} />
+        <InfoToolTip isOpen={isInfoToolTipOpen} onClose={closeAllPopups} success={success} />
       </CurrentUserContext.Provider>
     </div>
   );

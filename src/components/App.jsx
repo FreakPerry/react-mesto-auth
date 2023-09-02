@@ -133,8 +133,9 @@ function App() {
     try {
       const token = getToken();
       await authApi.getContent(token);
+      const userEmail = localStorage.getItem('userEmail');
       setIsLoggedIn(true);
-      setEmail(email);
+      setEmail(userEmail);
       navigate('/', { replace: true });
     } catch (e) {
       console.warn(e);
@@ -157,8 +158,10 @@ function App() {
   const handleLogin = async dataLogin => {
     try {
       await authApi.login(dataLogin);
+      const userEmail = dataLogin.email;
       setIsLoggedIn(true);
-      setEmail(dataLogin.email);
+      setEmail(userEmail);
+      localStorage.setItem('userEmail', userEmail);
       navigate('/', { replace: true });
     } catch (e) {
       console.warn(e);

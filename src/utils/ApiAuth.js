@@ -33,7 +33,6 @@ export const login = ({ email, password }) => {
   })
     .then(handleResponse)
     .then(data => {
-      console.log(data);
       if (data.token) {
         setToken(data.token);
         return data;

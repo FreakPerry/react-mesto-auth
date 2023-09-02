@@ -1,4 +1,3 @@
-import './App.css';
 import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
@@ -10,7 +9,7 @@ import { api } from '../utils/Api.js';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import Login from './Login';
 import Register from './Register';
 import * as authApi from '../utils/ApiAuth.js';
@@ -29,6 +28,8 @@ function App() {
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
   const [email, setEmail] = useState('');
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
 
   const fetchUser = async () => {
     try {
@@ -128,13 +129,16 @@ function App() {
     }
   };
 
-  const checkToken = async dataLogin => {
+  const checkToken = async () => {
     try {
       const token = getToken();
       await authApi.getContent(token);
-      setEmail(dataLogin.email);
+      setIsLoggedIn(true);
+      setEmail(email);
+      navigate('/', { replace: true });
     } catch (e) {
       console.warn(e);
+      navigate('/sign-in', { replace: true });
     }
   };
 
@@ -143,18 +147,24 @@ function App() {
   }, []);
 
   const handleLogout = () => {
-    removeToken();
+    const token = getToken();
+    removeToken(token);
     setEmail('');
+    setIsLoggedIn(false);
+    navigate('/sign-in', { replace: true });
   };
 
   const handleLogin = async dataLogin => {
     try {
       await authApi.login(dataLogin);
+      setIsLoggedIn(true);
       setEmail(dataLogin.email);
+      navigate('/', { replace: true });
     } catch (e) {
       console.warn(e);
       setSuccess(false);
       setIsInfoToolTipOpen(true);
+      setIsLoggedIn(false);
     }
   };
 
@@ -163,6 +173,7 @@ function App() {
       await authApi.register(dataRegister);
       setSuccess(true);
       setIsInfoToolTipOpen(true);
+      navigate('/sign-in', { replace: true });
     } catch (e) {
       console.warn(e);
       setSuccess(false);
@@ -178,7 +189,7 @@ function App() {
           <Route
             path="/"
             element={
-              <ProtectedRoute email={email}>
+              <ProtectedRoute isLoggedIn={isLoggedIn}>
                 <Main
                   onEditProfile={handleEditProfileClick}
                   onAddPlace={handleAddPlaceClick}
@@ -191,22 +202,8 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route
-            path="/sign-up"
-            element={
-              <ProtectedRoute onlyUnAuth email={email} success={success}>
-                <Register onRegister={handleRegister} />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/sign-in"
-            element={
-              <ProtectedRoute onlyUnAuth email={email}>
-                <Login onLogin={handleLogin} />
-              </ProtectedRoute>
-            }
-          />
+          <Route path="/sign-up" element={<Register onRegister={handleRegister} />} />
+          <Route path="/sign-in" element={<Login onLogin={handleLogin} />} />
         </Routes>
         <Footer />
         <EditProfilePopup

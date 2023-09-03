@@ -149,6 +149,8 @@ function App() {
 
   const handleLogout = () => {
     const token = getToken();
+    const userEmail = localStorage.getItem('userEmail');
+    localStorage.removeItem(userEmail);
     removeToken(token);
     setEmail('');
     setIsLoggedIn(false);

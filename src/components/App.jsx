@@ -79,6 +79,12 @@ function App() {
     setIsInfoToolTipOpen(false);
   };
 
+  const handleOverlayClick = e => {
+    if (e.target === e.currentTarget) {
+      closeAllPopups();
+    }
+  };
+
   const handleCardLike = async card => {
     const isLiked = card.likes.some(i => i._id === currentUser._id);
     try {
@@ -214,17 +220,20 @@ function App() {
         <EditProfilePopup
           isOpen={isEditProfilePopupOpen}
           onClose={closeAllPopups}
+          onOverlayClick={handleOverlayClick}
           onUpdateUser={handleUpdateUser}
         ></EditProfilePopup>
         <AddPlacePopup
           isOpen={isAddPlacePopupOpen}
           onClose={closeAllPopups}
+          onOverlayClick={handleOverlayClick}
           onAddPlace={handleAddPlacesubmit}
         ></AddPlacePopup>
         <PopupWithForm
           title={'Вы уверены?'}
           name={'confirm'}
           onClose={closeAllPopups}
+          onOverlayClick={handleOverlayClick}
           buttonText={'Да'}
         >
           <button type="submit" className="popup__save-button">
@@ -234,10 +243,21 @@ function App() {
         <EditAvatarPopup
           isOpen={isEditAvatarPopupOpen}
           onClose={closeAllPopups}
+          onOverlayClick={handleOverlayClick}
           onUpdateAvatar={handleUpdateAvatar}
         ></EditAvatarPopup>
-        <ImagePopup isOpen={isImageOpen} onClose={closeAllPopups} card={selectedCard} />
-        <InfoToolTip isOpen={isInfoToolTipOpen} onClose={closeAllPopups} success={success} />
+        <ImagePopup
+          isOpen={isImageOpen}
+          onClose={closeAllPopups}
+          onOverlayClick={handleOverlayClick}
+          card={selectedCard}
+        />
+        <InfoToolTip
+          isOpen={isInfoToolTipOpen}
+          onClose={closeAllPopups}
+          onOverlayClick={handleOverlayClick}
+          success={success}
+        />
       </CurrentUserContext.Provider>
     </div>
   );

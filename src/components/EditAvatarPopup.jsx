@@ -2,7 +2,7 @@ import PopupWithForm from './PopupWithForm';
 import { useEffect } from 'react';
 import useFormAndValidation from '../hooks/useFormAndValidation';
 
-function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
+function EditAvatarPopup({ isOpen, onClose, onOverlayClick, onUpdateAvatar }) {
   const { values, handleChange, errors, isValid, setValues, resetForm } = useFormAndValidation({
     avatar: ''
   });
@@ -28,6 +28,7 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
       name={'avatar'}
       isOpen={isOpen}
       onClose={onClose}
+      onOverlayClick={onOverlayClick}
       buttonText={'Подтвердить'}
       onSubmit={handleSubmit}
       isValid={isValid}

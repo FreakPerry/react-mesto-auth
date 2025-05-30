@@ -3,7 +3,7 @@ import PopupWithForm from './PopupWithForm';
 import CurrentUserContext from '../contexts/CurrentUserContext';
 import useFormAndValidation from '../hooks/useFormAndValidation';
 
-function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
+function EditProfilePopup({ isOpen, onClose, onOverlayClick, onUpdateUser }) {
   const currentUser = useContext(CurrentUserContext);
 
   const { values, handleChange, errors, isValid, setValues, resetForm } = useFormAndValidation({
@@ -34,6 +34,7 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
       name={'profile'}
       isOpen={isOpen}
       onClose={onClose}
+      onOverlayClick={onOverlayClick}
       buttonText={'Сохранить'}
       onSubmit={handleSubmit}
       isValid={isValid}

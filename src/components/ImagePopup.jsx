@@ -1,8 +1,9 @@
-function ImagePopup({ isOpen, onClose, card }) {
+function ImagePopup({ isOpen, onClose, onOverlayClick, card }) {
   return (
     <div
       className={`popup popup_bg-opacity ${isOpen ? 'popup_is-opened' : ''}`}
       id="popup-card-image"
+      onClick={onOverlayClick}
     >
       <div className="popup__container popup__container_type_figure">
         <figure className="popup__figure">

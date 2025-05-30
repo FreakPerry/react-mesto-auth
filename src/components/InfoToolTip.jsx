@@ -1,9 +1,9 @@
 import successImage from '../images/agree.svg';
 import unsuccessImage from '../images/disagree.svg';
 
-function InfoToolTip({ onClose, isOpen, success }) {
+function InfoToolTip({ onClose, isOpen, onOverlayClick, success }) {
   return (
-    <div className={`popup ${isOpen ? 'popup_is-opened' : ''}`}>
+    <div className={`popup ${isOpen ? 'popup_is-opened' : ''}`} onClick={onOverlayClick}>
       <div className="popup__container popup__container_success">
         <button className="button popup__close-button" type="button" onClick={onClose} />
         {success && (

@@ -1,6 +1,19 @@
-function PopupWithForm({ title, name, children, isOpen, onClose, buttonText, onSubmit }) {
+function PopupWithForm({
+  title,
+  name,
+  children,
+  isOpen,
+  onClose,
+  onOverlayClick,
+  buttonText,
+  onSubmit
+}) {
   return (
-    <div className={`popup ${isOpen ? 'popup_is-opened' : ''}`} id={`popup-${name}`}>
+    <div
+      className={`popup ${isOpen ? 'popup_is-opened' : ''}`}
+      id={`popup-${name}`}
+      onClick={onOverlayClick}
+    >
       <div className="popup__container">
         <button
           className="button popup__close-button"

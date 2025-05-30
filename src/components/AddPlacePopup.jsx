@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import PopupWithForm from './PopupWithForm';
 import useFormAndValidation from '../hooks/useFormAndValidation.js';
 
-function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
+function AddPlacePopup({ isOpen, onClose, onOverlayClick, onAddPlace }) {
   const { values, handleChange, errors, isValid, setValues, resetForm } = useFormAndValidation({
     name: '',
     link: ''
@@ -28,6 +28,7 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
       name={'card'}
       isOpen={isOpen}
       onClose={onClose}
+      onOverlayClick={onOverlayClick}
       buttonText={'Добавить'}
       onSubmit={handleSubmit}
       isValid={isValid}

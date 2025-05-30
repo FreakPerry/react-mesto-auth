@@ -12,7 +12,8 @@
 
 ## 🎥 Preview
 
-![Preview](./src/images/preview/Screen%20Recording%202025-05-30%20at%2015.28.15.mov.gif)
+![Preview login](./src/images/preview/Screen%20Recording%202025-05-30%20at%2015.28.15.mov.gif)
+![Preview main page](./src/images/preview/Screen%20Recording%202025-05-30%20at%2000.08.11.mov.gif)
 
 ---
 

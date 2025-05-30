@@ -12,8 +12,7 @@
 
 ## 🎥 Preview
 
-![Preview login](./src/images/preview/Screen%20Recording%202025-05-30%20at%2015.28.15.mov.gif)
-![Preview main page](./src/images/preview/Screen%20Recording%202025-05-30%20at%2000.08.11.mov.gif)
+| ![Preview login](./src/images/preview/Screen%20Recording%202025-05-30%20at%2015.28.15.mov.gif) | ![Preview main page](./src/images/preview/Screen%20Recording%202025-05-30%20at%2000.08.11.mov.gif) |
 
 ---
 
@@ -70,7 +69,6 @@ npm run start
 
 ### 🔐 Backend Requirements
 
-```
 To fully test authentication, this app requires a backend with the following endpoints:
 
 - POST /signup – register a new user
@@ -81,6 +79,5 @@ To fully test authentication, this app requires a backend with the following end
 
 - GET /cards, POST /cards, etc.
 
-You can use your own backend or clone mine:
-https://github.com/FreakPerry/express-mesto-gha
-```
+You can use your own backend or clone mine: [Mesto API](https://github.com/FreakPerry/express-mesto-gha)
+
